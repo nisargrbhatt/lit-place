@@ -6,6 +6,7 @@ import { formSchema } from "./form";
 import slugify from "slugify";
 import { safeAsync } from "@/lib/safe";
 import { client } from "@/lib/algolia";
+import { randomUUID } from "crypto";
 
 export const getAuthors = async () => {
   const authors = await prisma.author.findMany();
@@ -28,15 +29,23 @@ export const createLiterature = authenticatedAction
       }
     }
 
+    let titleSlug = slugify(parsedInput.title, {
+      lower: true,
+      trim: true,
+    });
+
+    if (titleSlug?.trim().length < 1) {
+      titleSlug = randomUUID();
+    }
+
+    console.log(titleSlug);
+
     const createdLiteratureResult = await safeAsync(
       prisma.literature.create({
         data: {
           title: parsedInput.title,
           content: parsedInput.content,
-          slug: slugify(parsedInput.title, {
-            lower: true,
-            trim: true,
-          }),
+          slug: titleSlug,
           ...(parsedInput.author.type === "existing"
             ? { author_id: parsedInput.author.id }
             : {

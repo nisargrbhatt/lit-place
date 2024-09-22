@@ -69,175 +69,187 @@ const CreateLitWrapper: FC<Props> = ({ authors }) => {
   });
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center gap-4">
+    <div className="flex w-full flex-col items-center justify-center gap-4">
       <form onSubmit={onSubmit} className="w-full max-w-md">
         <Form {...litForm}>
-          <FormField
-            control={litForm.control}
-            name="title"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Title</FormLabel>
-                <FormControl>
-                  <Input {...field} type="text" placeholder="Title" />
-                </FormControl>
-
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={litForm.control}
-            name="content"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Content</FormLabel>
-                <FormControl>
-                  <Textarea {...field} placeholder="Likh likh" />
-                </FormControl>
-
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          {showAuthorForm ? (
-            <Button
-              variant={"outline"}
-              type="button"
-              onClick={() => {
-                setShowAuthorForm(() => false);
-                litForm.setValue("author.type", "new");
-              }}
-            >
-              Select existing Author
-            </Button>
-          ) : (
-            <Button
-              variant={"outline"}
-              type="button"
-              onClick={() => {
-                setShowAuthorForm(() => true);
-                litForm.setValue("author.type", "new");
-              }}
-            >
-              Add Author instead
-            </Button>
-          )}
-
-          {!showAuthorForm ? (
+          <div className="flex w-full flex-col items-start justify-start gap-2">
             <FormField
               control={litForm.control}
-              name="author.id"
+              name="title"
               render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>Author</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          className={cn(
-                            "w-[200px] justify-between",
-                            !field.value && "text-muted-foreground"
-                          )}
-                        >
-                          {field.value
-                            ? authors?.find(
-                                (author) => author.id === field.value
-                              )?.name
-                            : "Select Author"}
-                          <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-[200px] p-0">
-                      <Command>
-                        <CommandInput
-                          placeholder="Search author..."
-                          className="h-9"
-                        />
-                        <CommandList>
-                          <CommandEmpty>No author found.</CommandEmpty>
-                          <CommandGroup>
-                            {authors?.map((author) => (
-                              <CommandItem
-                                value={author.id}
-                                key={author.id}
-                                onSelect={() => {
-                                  litForm.setValue("author.id", author.id);
-                                }}
-                              >
-                                {author.name}
-                                <CheckIcon
-                                  className={cn(
-                                    "ml-auto h-4 w-4",
-                                    author.id === field.value
-                                      ? "opacity-100"
-                                      : "opacity-0"
-                                  )}
-                                />
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
+                <FormItem className="w-full">
+                  <FormLabel>Title</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="text" placeholder="Title" />
+                  </FormControl>
 
                   <FormMessage />
                 </FormItem>
               )}
             />
-          ) : (
-            <>
-              <FormField
-                control={litForm.control}
-                name="author.name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Author Name</FormLabel>
-                    <FormControl>
-                      <Input {...field} type="text" placeholder="Author Name" />
-                    </FormControl>
+            <FormField
+              control={litForm.control}
+              name="content"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Content</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      {...field}
+                      placeholder="Likh likh"
+                      rows={20}
+                      cols={100}
+                    />
+                  </FormControl>
 
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={litForm.control}
-                name="author.pen_name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Author Pen name</FormLabel>
-                    <FormControl>
-                      <Input {...field} type="text" />
-                    </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            {showAuthorForm ? (
+              <Button
+                variant={"outline"}
+                type="button"
+                onClick={() => {
+                  setShowAuthorForm(() => false);
+                  litForm.setValue("author.type", "new");
+                }}
+              >
+                Select existing Author
+              </Button>
+            ) : (
+              <Button
+                variant={"outline"}
+                type="button"
+                onClick={() => {
+                  setShowAuthorForm(() => true);
+                  litForm.setValue("author.type", "new");
+                }}
+              >
+                Add Author instead
+              </Button>
+            )}
+
+            {!showAuthorForm ? (
               <FormField
                 control={litForm.control}
-                name="author.about"
+                name="author.id"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="flex flex-col">
                     <FormLabel>Author</FormLabel>
-                    <FormControl>
-                      <Textarea {...field} placeholder="Author about" />
-                    </FormControl>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            className={cn(
+                              "w-[200px] justify-between",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            {field.value
+                              ? authors?.find(
+                                  (author) => author.id === field.value
+                                )?.name
+                              : "Select Author"}
+                            <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[200px] p-0">
+                        <Command>
+                          <CommandInput
+                            placeholder="Search author..."
+                            className="h-9"
+                          />
+                          <CommandList>
+                            <CommandEmpty>No author found.</CommandEmpty>
+                            <CommandGroup>
+                              {authors?.map((author) => (
+                                <CommandItem
+                                  value={author.id}
+                                  key={author.id}
+                                  onSelect={() => {
+                                    litForm.setValue("author.id", author.id);
+                                  }}
+                                >
+                                  {author.name}
+                                  <CheckIcon
+                                    className={cn(
+                                      "ml-auto h-4 w-4",
+                                      author.id === field.value
+                                        ? "opacity-100"
+                                        : "opacity-0"
+                                    )}
+                                  />
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
 
                     <FormMessage />
                   </FormItem>
                 )}
               />
-            </>
-          )}
-          <Button type="submit" disabled={status === "executing"}>
-            Create
-          </Button>
+            ) : (
+              <>
+                <FormField
+                  control={litForm.control}
+                  name="author.name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Author Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type="text"
+                          placeholder="Author Name"
+                        />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={litForm.control}
+                  name="author.pen_name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Author Pen name</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="text" />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={litForm.control}
+                  name="author.about"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Author</FormLabel>
+                      <FormControl>
+                        <Textarea {...field} placeholder="Author about" />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </>
+            )}
+            <Button type="submit" disabled={status === "executing"}>
+              Create
+            </Button>
+          </div>
         </Form>
       </form>
     </div>

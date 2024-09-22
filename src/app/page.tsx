@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
-import { Search } from "./_components/Search";
+import AutocompleteWrapper from "./_components/Autocomplete";
 
 export const metadata = {
   title: "Literature Place",
@@ -33,22 +33,28 @@ export default async function Home() {
 
   return (
     <div>
-      <h1 className="font-bold">Literature Place</h1>
-      <Search />
-      {lits?.map((i) => (
-        <Card key={i.id}>
-          <CardHeader>
-            <CardTitle>{i.title}</CardTitle>
-            <CardDescription>{i.author.name}</CardDescription>
-          </CardHeader>
-          <CardContent>{i.content}</CardContent>
-          <CardFooter>
-            <Link href={`/literature/${i.slug}`}>
-              <Button>Open</Button>
-            </Link>
-          </CardFooter>
-        </Card>
-      ))}
+      <div className="flex w-full items-center justify-between gap-2">
+        <AutocompleteWrapper />
+        <Link href="/create">
+          <Button>Create</Button>
+        </Link>
+      </div>
+      <div className="grid w-full grid-cols-1 gap-4 py-2 sm:grid-cols-2 lg:grid-cols-3">
+        {lits?.map((i) => (
+          <Card key={i.id}>
+            <CardHeader>
+              <CardTitle>{i.title}</CardTitle>
+              <CardDescription>{i.author.name}</CardDescription>
+            </CardHeader>
+            <CardContent>{i.content.slice(0, 100)}</CardContent>
+            <CardFooter>
+              <Link href={`/${i.slug}`}>
+                <Button>Open</Button>
+              </Link>
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }
